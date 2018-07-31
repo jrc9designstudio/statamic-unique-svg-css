@@ -1,0 +1,6 @@
+name: Unique SVG CSS
+version: 1.0.0
+description: Avoid inter SVG CSS class name conflicts
+url: https://github.com/jrc9designstudio/statamic-unique-svg-css
+developer: JRC9 Design Studio
+developer_url: https://jrc9.ca
