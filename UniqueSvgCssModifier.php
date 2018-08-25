@@ -19,14 +19,18 @@ class UniqueSvgCssModifier extends Modifier
         // Make a unique string by hashing the content
         $uniq = md5($value);
 
-        // append - and unique data attribute after every class attribute
-        $result = preg_replace('/(class="[\\w\\s-_:]+")/uism', '$1 data-' . $uniq . ' ', $value);
-
         // find any inline css classes and add - and uniq data attributes to the selector
         // this needs to work with spaces, without spaces on comma seperated lists of classes
         // this also needs to not find attributes that look similar in the svg
-        $result = preg_replace('/(?<=[.])([\\w-_]+)([,{\\s])(?=[a-z.{\\s]{2})/uis', '$1[data-' . $uniq . ']$2', $result);
+        preg_match('/(?<=<style>)(.+)(?=<\/style>)/usm', $value, $result);
+        if (sizeof($result) > 0) {
+            $replace = preg_replace('/(?<=[.]{1})([\\w-_:]+)(?=[{,\\s\\.]{1})/u', '$1[data-' . $uniq . ']', $result[0]);
+            $value = $result = preg_replace('/(<style>.+<\/style>)/usm', '<style>' . $replace . '</style>', $value);
+        }
 
-        return $result;
+        // append - and unique data attribute after every class attribute
+        $value = preg_replace('/(class="[\\w\\s-_:]+")/u', '$1 data-' . $uniq . ' ', $value);
+
+        return $value;
     }
 }
