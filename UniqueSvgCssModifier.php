@@ -25,7 +25,13 @@ class UniqueSvgCssModifier extends Modifier
         preg_match('/(?<=<style>)(.+)(?=<\/style>)/usm', $value, $result);
         if (sizeof($result) > 0) {
             $replace = preg_replace('/(?<=[.]{1})([\\w-_:]+)(?=[{,\\s\\.]{1})/u', '$1[data-' . $uniq . ']', $result[0]);
-            $value = $result = preg_replace('/(<style>.+<\/style>)/usm', '<style>' . $replace . '</style>', $value);
+            $value = preg_replace('/(?<=<style>)(.+)(?=<\/style>)/usm', $replace, $value);
+        } else {
+            preg_match('/(?<=<style\stype="text\/css">)(.+)(?=<\/style>)/usm', $value, $result);
+            if (sizeof($result) > 0) {
+                $replace = preg_replace('/(?<=[.]{1})([\\w-_:]+)(?=[{,\\s\\.]{1})/u', '$1[data-' . $uniq . ']', $result[0]);
+                $value = preg_replace('/(?<=<style\stype="text\/css">)(.+)(?=<\/style>)/usm', $replace, $value);
+            }
         }
 
         // append - and unique data attribute after every class attribute
